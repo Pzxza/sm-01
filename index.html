@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMART BOX - IoT Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;color:#e8eefc;background:#030a1a url("2.png") center/cover no-repeat}
+@media(max-width:900px){body{background:#030a1a}}
+.stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
+.stage>*{position:absolute}
+.frame{inset:24px 24px 26px 24px;border:2px solid #17356b;border-radius:30px;background:#061428}
+.hline{left:24px;top:174px;width:1872px;height:2px;background:#12306a}
+.vline{left:395px;top:175px;width:2px;height:879px;background:#12306a}
+.fline{left:396px;top:991px;width:1500px;height:2px;background:#12306a}
+.logo{left:85px;top:48px;width:108px;height:108px;color:#1d6cf0}
+.logo svg{stroke-width:2.2}
+.title{left:233px;top:44px;font-size:58px;font-weight:800;line-height:68px;color:#fff;letter-spacing:.5px}
+.sub{left:233px;top:112px;font-size:28px;line-height:36px;font-weight:500;color:#6b95de}
+.badge{left:1532px;top:68px;width:303px;height:67px;border:3px solid #1fb855;border-radius:16px;color:#2fd16a;font-size:28px;font-weight:600;text-align:center;line-height:61px}
+.badge.off{border-color:#ef4444;color:#f87171}
+.menu{left:70px;top:224px;font-size:28px;font-weight:600;line-height:36px;color:#4a86e8}
+.nav{left:70px;top:301px;display:flex;flex-direction:column;gap:33px}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:15px;height:52px;font-size:28px;font-weight:500;color:#e8eefc;position:relative}
+.nav .ic{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;color:#cdd9f3}
+.nav .ic svg{width:34px;height:34px}
+.nav button.on{color:#3b82f6;font-weight:600}
+.nav button.on .ic{background:#12306a;color:#3b82f6}
+.nav button.on .ic svg{fill:#3b82f6}
+.nav .dot{position:absolute;left:36px;top:2px;min-width:20px;height:20px;border-radius:10px;background:#ef4444;color:#fff;font-size:13px;line-height:20px;text-align:center;font-weight:700;display:none}
+.foot{left:644px;top:1006px;font-size:28px;line-height:36px;font-weight:600;letter-spacing:.5px;color:#3b82f6}
+.view{left:396px;top:176px;width:1500px;height:815px;display:none}
+.view.on{display:block}
+.view>*{position:absolute}
+.h1{left:38px;top:25px;font-size:46px;line-height:56px;font-weight:700;color:#fff}
+.date{left:37px;top:89px;font-size:27px;line-height:34px;font-weight:600;color:#3f7fe0}
+.card{background:linear-gradient(#0d2347,#0a1c3d);border:2px solid #1b3f7c;border-radius:20px}
+.card .ci{position:absolute;left:29px;top:19px;width:82px;height:82px;border-radius:50%;border:2px solid;display:grid;place-items:center}
+.card .ci svg{width:40px;height:40px}
+.card .lb{position:absolute;left:140px;top:40px;font-size:56px;line-height:68px;font-weight:700;color:#fff;white-space:nowrap}
+.card .val{position:absolute;right:46px;top:31px;font-size:40px;line-height:48px;font-weight:600;color:#4ade80}
+.c-chip{color:#34d399;border-color:#14633f;background:#0b2a2a}
+.c-door{color:#3b82f6;border-color:#1d4ed8;background:#0b1f4a}
+.c-folder{color:#d9a521;border-color:#6b4e10;background:#1a1a1f}
+.c-parcel{color:#8b7cf6;border-color:#3b3a8f;background:#14153f}
+.panel{background:#081a38;border:2px solid #1a3a73;border-radius:24px}
+.panel h3{position:absolute;left:25px;top:24px;font-size:28px;line-height:36px;font-weight:600;color:#6fa0e8}
+.rows{position:absolute;left:29px;top:77px;width:619px}
+.row{display:flex;align-items:center;height:68.3px;border-bottom:2px solid #12306a;padding-left:4px;font-size:28px;font-weight:500;color:#eef3ff}
+.row:last-child{border-bottom:0}
+.row .ri{width:40px;height:40px;margin-right:20px;display:grid;place-items:center;border-radius:10px}
+.row .ri svg{width:30px;height:30px}
+.row b{margin-left:auto;padding-right:5px;font-weight:600;color:#4ade80}
+.act{position:absolute;left:30px;top:72px;width:616px}
+.act .row{height:79px;padding:0}
+.act .row i{font-style:normal;width:128px;color:#3b82f6;font-weight:500;padding-left:1px}
+.warn{color:#fbbf24!important}.bad{color:#f87171!important}.info{color:#38bdf8!important}
+/* sub pages */
+.box{left:40px;top:122px;width:1412px;height:660px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.btn{all:unset;cursor:pointer;height:120px;border-radius:20px;text-align:center;font-size:30px;font-weight:600;background:linear-gradient(#0d2347,#0a1c3d);border:2px solid #1b3f7c;color:#e8eefc;line-height:116px}
+.btn:hover{border-color:#3b82f6;color:#3b82f6}
+.st{margin-top:24px;padding:24px 32px;font-size:28px;line-height:48px}
+.st b{color:#4ade80;float:right}
+.tbl{width:100%;border-collapse:collapse;font-size:26px}
+.tbl th{text-align:left;color:#6fa0e8;padding:14px 20px;font-weight:600;border-bottom:2px solid #12306a}
+.tbl td{padding:14px 20px;border-bottom:2px solid #0e2650}
+.scroll{height:660px;overflow:auto;padding:6px 20px}
+.nt{display:flex;gap:20px;align-items:center;padding:18px 8px;border-bottom:2px solid #0e2650;font-size:28px}
+.nt i{font-style:normal;color:#3b82f6;width:90px}
+.nt s{width:14px;height:14px;border-radius:50%;background:#ef4444;flex:none}
+.nt.rd s{background:#1b3f7c}.nt.rd{color:#8aa0c8}
+.set{display:flex;align-items:center;justify-content:space-between;padding:22px 32px;border-bottom:2px solid #0e2650;font-size:28px}
+.set input,.set select{background:#0a1c3d;border:2px solid #1b3f7c;border-radius:12px;color:#fff;font:inherit;font-size:24px;padding:8px 16px}
+.tg{width:84px;height:44px;border-radius:22px;background:#1b3f7c;position:relative;cursor:pointer}
+.tg:after{content:"";position:absolute;left:5px;top:5px;width:34px;height:34px;border-radius:50%;background:#fff;transition:.2s}
+.tg.on{background:#22c55e}.tg.on:after{left:45px}
+canvas{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="frame"></div><div class="hline"></div><div class="vline"></div><div class="fline"></div>
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div>
+  <div class="title">SMART BOX</div><div class="sub">IoT Management System</div>
+  <div class="badge" id="badge">SYSTEM ONLINE</div>
+  <div class="menu">MENU</div>
+  <nav class="nav" id="nav">
+    <button data-v="overview" class="on"><span class="ic" data-i="home"></span>Overview</button>
+    <button data-v="control"><span class="ic" data-i="box"></span>Box Control</button>
+    <button data-v="monitor"><span class="ic" data-i="chart"></span>Monitoring</button>
+    <button data-v="history"><span class="ic" data-i="clock"></span>History</button>
+    <button data-v="notify"><span class="ic" data-i="bell"></span>Notification<span class="dot" id="dot"></span></button>
+    <button data-v="settings"><span class="ic" data-i="gear"></span>Settings</button>
+  </nav>
+  <div class="foot">SMART BOX IOT SYSTEM : CONTROL PANEL</div>
+
+  <!-- Overview -->
+  <section class="view on" id="v-overview">
+    <div class="h1">Overview</div><div class="date" id="date"></div>
+    <div class="card" style="left:40px;top:151px;width:679px;height:123px"><div class="ci c-chip" data-i="chip"></div><div class="lb">ESP32 Status</div><div class="val" id="esp"></div></div>
+    <div class="card" style="left:741px;top:151px;width:705px;height:123px"><div class="ci c-door" data-i="door"></div><div class="lb">Door Status</div><div class="val" id="door"></div></div>
+    <div class="card" style="left:40px;top:292px;width:679px;height:122px"><div class="ci c-folder" data-i="folder"></div><div class="lb">Documents</div><div class="val" id="docs"></div></div>
+    <div class="card" style="left:741px;top:292px;width:705px;height:122px"><div class="ci c-parcel" data-i="parcel"></div><div class="lb">Parcels</div><div class="val" id="parcels"></div></div>
+    <div class="panel" style="left:40px;top:438px;width:682px;height:355px">
+      <h3>Device Monitoring</h3>
+      <div class="rows">
+        <div class="row"><span class="ri" data-i="sensor" style="color:#34d399"></span>IR Sensor<b id="ir"></b></div>
+        <div class="row"><span class="ri" data-i="limit" style="color:#3b82f6"></span>Limit Switch<b id="limit"></b></div>
+        <div class="row"><span class="ri" data-i="lock" style="color:#eab308"></span>Magnetic Lock<b id="lock"></b></div>
+        <div class="row"><span class="ri" data-i="globe" style="color:#8b7cf6"></span>LINE API<b id="line"></b></div>
+      </div>
+    </div>
+    <div class="panel" style="left:772px;top:438px;width:680px;height:355px">
+      <h3>Recent Activity</h3><div class="act" id="act"></div>
+    </div>
+  </section>
+
+  <!-- Box Control -->
+  <section class="view" id="v-control">
+    <div class="h1">Box Control</div><div class="date">Control the box and simulate events</div>
+    <div class="box">
+      <div class="grid">
+        <button class="btn" id="b-unlock">Unlock</button>
+        <button class="btn" id="b-lock">Lock</button>
+        <button class="btn" id="b-door">Open / Close Door</button>
+        <button class="btn" id="b-doc">+ Document</button>
+        <button class="btn" id="b-parcel">+ Parcel</button>
+        <button class="btn" id="b-line">Send LINE Alert</button>
+      </div>
+      <div class="card st">Door<b id="s-door"></b><br>Magnetic Lock<b id="s-lock"></b><br>Limit Switch<b id="s-limit"></b></div>
+    </div>
+  </section>
+
+  <!-- Monitoring -->
+  <section class="view" id="v-monitor">
+    <div class="h1">Monitoring</div><div class="date">Live simulated sensor data</div>
+    <div class="box">
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card st" style="margin:0;padding:12px 32px">IR distance<b id="m-ir"></b></div>
+        <div class="card st" style="margin:0;padding:12px 32px">Wi-Fi signal<b id="m-rssi"></b></div>
+      </div>
+      <div class="panel" style="margin-top:24px;height:480px;padding:20px"><canvas id="cv" width="1360" height="440"></canvas></div>
+    </div>
+  </section>
+
+  <!-- History -->
+  <section class="view" id="v-history">
+    <div class="h1">History</div><div class="date">All events since the system started</div>
+    <div class="panel box"><div class="scroll"><table class="tbl"><thead><tr><th>Time</th><th>Event</th></tr></thead><tbody id="hist"></tbody></table></div></div>
+  </section>
+
+  <!-- Notification -->
+  <section class="view" id="v-notify">
+    <div class="h1">Notification</div><div class="date" id="nsum"></div>
+    <button class="btn" id="readall" style="left:1160px;top:30px;width:290px;height:70px;line-height:66px;font-size:26px">Mark all read</button>
+    <div class="panel box"><div class="scroll" id="nlist"></div></div>
+  </section>
+
+  <!-- Settings -->
+  <section class="view" id="v-settings">
+    <div class="h1">Settings</div><div class="date">Simulation and connection</div>
+    <div class="panel box" style="height:auto">
+      <div class="set">Run simulation<div class="tg on" id="t-sim"></div></div>
+      <div class="set">Update every<select id="every"><option value="1500">1.5 s</option><option value="3000" selected>3 s</option><option value="6000">6 s</option></select></div>
+      <div class="set">LINE access token<input id="tok" placeholder="Paste token" style="width:520px"></div>
+      <div class="set" style="border:0">Reset data<button class="btn" id="reset" style="width:260px;height:64px;line-height:60px;font-size:26px">Reset</button></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const p=d=>`<path d="${d}"/>`;
+const I={
+ home:p("M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"),
+ box:p("M12 2l9 5v10l-9 5-9-5V7z")+p("M3 7l9 5 9-5M12 12v10"),
+ chart:p("M3 3v18h18M7 15l4-5 3 3 5-6"),
+ clock:'<circle cx="12" cy="12" r="9"/>'+p("M12 7v5l3 2"),
+ bell:p("M6 16v-5a6 6 0 0112 0v5l2 2H4zM10 20a2 2 0 004 0"),
+ gear:'<circle cx="12" cy="12" r="4"/>'+p("M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"),
+ chip:'<rect x="7" y="7" width="10" height="10" rx="2"/>'+p("M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"),
+ door:p("M5 21V3h10v18M3 21h14M12 12h.01"),
+ folder:p("M3 6h6l2 2h10v11H3z"),
+ parcel:p("M12 3l8 4v10l-8 4-8-4V7z")+p("M4 7l8 4 8-4M12 11v10"),
+ sensor:'<circle cx="12" cy="12" r="1"/>'+p("M8 8a6 6 0 000 8M16 8a6 6 0 010 8M5 5a10 10 0 000 14M19 5a10 10 0 010 14"),
+ limit:'<rect x="9" y="3" width="6" height="5" rx="1"/>'+'<rect x="7" y="8" width="10" height="13" rx="2"/>'+p("M12 12v4"),
+ lock:'<rect x="5" y="11" width="14" height="10" rx="2"/>'+p("M8 11V8a4 4 0 018 0v3"),
+ globe:'<circle cx="12" cy="12" r="10"/>'+p("M2 12h20M12 2c3 3 3 17 0 20M12 2c-3 3-3 17 0 20")
+};
+$$("[data-i]").forEach(e=>e.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%">${I[e.dataset.i]}</svg>`);
+
+// scale 1920x1080 stage to the window
+function fit(){$("#stage").style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/1920,innerHeight/1080)})`}
+addEventListener("resize",fit);fit();
+
+// state (random start values)
+const ago=m=>new Date(Date.now()-m*6e4).toTimeString().slice(0,5);
+const S={esp:"Online",door:"Closed",docs:R(5,30),parcels:R(3,20),ir:"Ready",limit:"Closed",lock:"Locked",line:"Connected",sim:true,ms:3000,log:[],unread:0,irD:[],rssi:[]};
+function seed(){S.log=[{t:ago(R(1,9)),m:"Document received"},{t:ago(R(10,25)),m:"Parcel received"},{t:ago(R(26,45)),m:"System started"}];S.notes=[...S.log.slice(0,2).map(x=>({...x,read:true}))];S.unread=0}
+seed();
+function add(m){const t=new Date().toTimeString().slice(0,5);S.log.unshift({t,m});S.notes.unshift({t,m,read:false});S.log.length=Math.min(S.log.length,80);S.notes.length=Math.min(S.notes.length,80);render()}
+const cls=v=>({Open:"warn",Unlocked:"warn",Offline:"bad",Disconnected:"bad",Detected:"info"}[v]||"");
+function set(id,v,c){const e=$("#"+id);e.textContent=v;e.className=(e.className.replace(/\b(warn|bad|info)\b/g,"")+" "+(c??cls(v))).trim()}
+function render(){
+  const d=new Date(),n=x=>d.toLocaleDateString("en-US",x);
+  $("#date").textContent=`${n({weekday:"long"})}, ${d.getDate()} ${n({month:"long"})} ${d.getFullYear()}`;
+  set("esp",S.esp);set("door",S.door);set("docs",String(S.docs).padStart(2,"0"),"");set("parcels",String(S.parcels).padStart(2,"0"),"");
+  set("ir",S.ir);set("limit",S.limit);set("lock",S.lock);set("line",S.line);
+  ["door","lock","limit"].forEach(k=>set("s-"+k,S[k]));
+  const b=$("#badge");b.textContent=S.esp=="Online"?"SYSTEM ONLINE":"SYSTEM OFFLINE";b.classList.toggle("off",S.esp!="Online");
+  $("#act").innerHTML=S.log.slice(0,3).map(x=>`<div class="row"><i>${x.t}</i>${x.m}</div>`).join("");
+  $("#hist").innerHTML=S.log.map(x=>`<tr><td style="color:#3b82f6;width:180px">${x.t}</td><td>${x.m}</td></tr>`).join("");
+  S.unread=S.notes.filter(x=>!x.read).length;
+  const dot=$("#dot");dot.style.display=S.unread?"block":"none";dot.textContent=S.unread;
+  $("#nsum").textContent=S.unread?`${S.unread} unread`:"All caught up";
+  $("#nlist").innerHTML=S.notes.map(x=>`<div class="nt ${x.read?"rd":""}"><s></s><i>${x.t}</i>${x.m}</div>`).join("");
+}
+function toggleDoor(){
+  if(S.door=="Closed"){if(S.lock=="Locked")S.lock="Unlocked";S.door="Open";S.limit="Open";add("Door opened")}
+  else{S.door="Closed";S.limit="Closed";S.lock="Locked";add("Door closed")}
+}
+function tick(){
+  if(!S.sim)return;
+  const r=Math.random();
+  if(S.esp=="Offline"){if(r<.6){S.esp="Online";add("ESP32 back online")}}
+  else if(r<.22){S.docs++;add("Document received")}
+  else if(r<.44){S.parcels++;add("Parcel received")}
+  else if(r<.66){toggleDoor()}
+  else if(r<.74){S.line=S.line=="Connected"?"Disconnected":"Connected";add("LINE API "+S.line.toLowerCase())}
+  else if(r<.78){S.esp="Offline";add("ESP32 went offline")}
+  S.ir=Math.random()<.2?"Detected":"Ready";render();
+}
+let timer;const start=()=>{clearInterval(timer);timer=setInterval(tick,S.ms)};start();
+
+// navigation
+function show(v){
+  $$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v==v));
+  $$(".view").forEach(s=>s.classList.toggle("on",s.id=="v-"+v));
+  if(v=="monitor")draw();
+}
+$$("#nav button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+
+// box control
+$("#b-unlock").onclick=()=>{S.lock="Unlocked";add("Magnetic lock unlocked")};
+$("#b-lock").onclick=()=>{if(S.door=="Open")return add("Cannot lock: door is open");S.lock="Locked";add("Magnetic lock locked")};
+$("#b-door").onclick=toggleDoor;
+$("#b-doc").onclick=()=>{S.docs++;add("Document received")};
+$("#b-parcel").onclick=()=>{S.parcels++;add("Parcel received")};
+$("#b-line").onclick=()=>add("LINE alert sent");
+
+// notification + settings
+$("#readall").onclick=()=>{S.notes.forEach(x=>x.read=true);render()};
+$("#t-sim").onclick=e=>{S.sim=!S.sim;e.target.classList.toggle("on",S.sim)};
+$("#every").onchange=e=>{S.ms=+e.target.value;start()};
+$("#reset").onclick=()=>{Object.assign(S,{esp:"Online",door:"Closed",docs:R(5,30),parcels:R(3,20),ir:"Ready",limit:"Closed",lock:"Locked",line:"Connected"});seed();render()};
+
+// monitoring chart (random walk, 1 point per second)
+let ir=30,rs=-60;
+function draw(){
+  const c=$("#cv"),x=c.getContext("2d"),W=c.width,H=c.height;
+  x.clearRect(0,0,W,H);x.strokeStyle="#12306a";x.lineWidth=1;
+  for(let i=0;i<=4;i++){x.beginPath();x.moveTo(0,i*H/4);x.lineTo(W,i*H/4);x.stroke()}
+  const line=(a,lo,hi,col)=>{x.strokeStyle=col;x.lineWidth=3;x.beginPath();a.forEach((v,i)=>{const px=i*W/59,py=H-(v-lo)/(hi-lo)*H;i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()};
+  line(S.irD,0,70,"#34d399");line(S.rssi,-90,-30,"#3b82f6");
+}
+setInterval(()=>{
+  ir=Math.max(3,Math.min(65,ir+R(-6,6)));rs=Math.max(-85,Math.min(-35,rs+R(-3,3)));
+  S.irD.push(ir);S.rssi.push(rs);if(S.irD.length>60){S.irD.shift();S.rssi.shift()}
+  $("#m-ir").textContent=ir+" cm";$("#m-rssi").textContent=rs+" dBm";
+  if($("#v-monitor").classList.contains("on"))draw();
+},1000);
+render();
+</script>
+</body>
+</html>
